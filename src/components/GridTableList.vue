@@ -37,6 +37,7 @@
                   <span>{{ user.nation }}</span>
                 </td>
                 <td class="col">
+                  <!-- <span v-for="city in user.city" :key="city">{{ city }}</span> -->
                   <span>{{ user.city }}</span>
                 </td>
               </tr>

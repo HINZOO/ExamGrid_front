@@ -54,10 +54,34 @@
                             <label class="form-control">도시</label>
                     </div>
                     <div class="col city">
-                        <select class="form-select" v-model="this.city" name="city">
-                        <option  value="">도시</option>
-                        <option v-for="city in cities[this.nation]" :value="city" :key="city">{{ city }}</option>
-                    </select>                   
+                        <div class="col dropdown">
+                        <button type="button" class="w-100 btn btn-primary bg-white text-black text-start" data-bs-toggle="dropdown" >
+                        <span v-if="this.citiesString==''">도시</span>
+                        <span v-else>{{ this.citiesString }}</span>
+                        </button>
+                        <div class="dropdown-menu p-4 w-100">
+                            <label>
+                            <input 
+                                    type="checkbox" 
+                                    @click="checkedAll($event.target.checked)"
+                                    v-model="selectAllCitiesCheckbox"
+                                    >
+                                    전체
+                            </label>
+                            <div  
+                                v-for="city in this.cities[nation]"
+                                :key="city" 
+                            >
+                                <label>
+                                <input type="checkbox"  
+                                    v-model="selectedCites"
+                                    name="city" 
+                                :value="city"
+                                >{{ city }}
+                                </label>
+                            </div>  
+                        </div>
+                        </div> 
                     </div>
                     </div>
                     <div class="text-center my-3">
@@ -81,6 +105,7 @@ export default {
     },
     data(){
         return{
+            selectAllCitiesCheckbox: false,
             isModal : false,
             countries: ['한국', '미국', '일본'], // 국가 목록
             cities: {
@@ -88,6 +113,8 @@ export default {
                 미국: ['뉴욕','LA', '시카고'],
                 일본: ['도쿄', '오사카', '후쿠오카']
             }, // 도시 목록
+            selectedCites:[],
+            citiesString:'',
             u_no:'',
             u_id: '',
             uname: '',
@@ -101,7 +128,12 @@ export default {
     },
     methods:{
         updateCities() {
-         this.city= ''; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
+            this.city = '';
+            this.selectedCites=[];
+            this.selectAllCitiesCheckbox=false; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
+        },
+        updateCitiesString() {
+        this.citiesString = this.selectedCites.join();
         },
         fnModalClose(){
             this.isModal=false
@@ -119,7 +151,9 @@ export default {
                this.uname=data.uname;
                this.gender=data.gender;
                this.nation=data.nation;
-               this.city=data.city;
+               const cityArr=data.city.split(",")
+               this.selectedCites = cityArr
+               //this.city=data.city;
                this.post_time=data.post_time
                return this.user=data;
             }).catch((err) => {
@@ -135,7 +169,7 @@ export default {
                 "uname": this.uname,
                 "gender":this.gender,
                 "nation": this.nation,
-                "city":this.city,
+                "city":this.citiesString,
             }
             let apiUrl ='/api/update';
             this.$axios.post(apiUrl,form)
@@ -152,12 +186,27 @@ export default {
         fnOneUser(){
             this.$emit('userLink',this.user);
         },
+        checkedAll(checked){
+            this.selectAllCitiesCheckbox = checked
+            if (this.selectAllCitiesCheckbox) {
+            this.selectedCites = [...this.cities[this.nation]];
+            this.selectAllCitiesCheckbox=false;
+            } else {
+                this.selectedCites = [];
+            }
+        }
     },
     mounted() {
     this.isModal = this.isOpen;
     this.fnUserList()
-  },
+     }, 
+    watch: {
+    selectedCites() {
+    this.updateCitiesString(); // selectedCites 값 변경 시 citiesString 업데이트
+     }
+    }
 }
+
 </script>
 
 <style scoped>

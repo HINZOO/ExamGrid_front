@@ -41,10 +41,35 @@
             </select>
           </div>
           <div class="col city">
-            <select class="form-select" v-model="selectedCity" name="city">
-              <option  value="">도시</option>
-              <option v-for="city in cities[selectedNation]" :value="city" :key="city">{{ city }}</option>
-            </select>                   
+            <div class="col dropdown">
+              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start" data-bs-toggle="dropdown" >
+                <span v-if="this.citiesString==''">도시</span>
+               <span v-else>{{ this.citiesString }}</span>
+              </button>
+              <div class="dropdown-menu p-4 w-100">
+                <label>
+                  <input 
+                          type="checkbox" 
+                          @click="checkedAll($event.target.checked)"
+                          v-model="selectAllCitiesCheckbox"
+                          >
+                          전체
+                </label>
+                  <div  
+                      v-for="city in this.cities[selectedNation]"
+                      :key="city" 
+                  >
+                    <label>
+                      <input type="checkbox"  
+                        v-model="selectedCites"
+                        name="city" 
+                       :value="city"
+                       >{{ city }}
+                    </label>
+                  </div>  
+              </div>
+            </div>  
+                             
           </div>
           <div class="col">
               <div class="form-floating">
@@ -102,6 +127,7 @@ import ModifyModal from '@/components/ModifyModal.vue'
   },
   data() {
     return {
+      selectAllCitiesCheckbox: false,
       isOpen: false,
       updateUserNo: '',
       IndexDelArr:[],
@@ -116,6 +142,8 @@ import ModifyModal from '@/components/ModifyModal.vue'
       fromTime:'',
       selectedNation: '',
       selectedCity: '',
+      selectedCites:[],
+      citiesString:'',
       countries: ['한국', '미국', '일본'], // 국가 목록
       cities: {
         한국: ['서울', '부산', '인천','경기','대구'],
@@ -133,7 +161,12 @@ import ModifyModal from '@/components/ModifyModal.vue'
   },
   methods: {
     updateCities() {
-      this.selectedCity = ''; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
+      this.selectedCity = '';
+      this.selectedCites=[];
+      this.selectAllCitiesCheckbox=false; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
+    },
+    updateCitiesString() {
+    this.citiesString = this.selectedCites.join();
     },
     checkDuplicateId() {
       const apiUrl = '/api/idcheck';
@@ -182,13 +215,14 @@ import ModifyModal from '@/components/ModifyModal.vue'
             return;
           }
       let apiUrl='/api/insert';
+      this.citiesString = this.selectedCites.join()
       this.form = {
         "u_no": this.idx,
         "u_id": this.u_id,
         "uname": this.uname,
         "gender":this.gender,
         "nation": this.selectedNation,
-        "city":this.selectedCity,
+        "city":this.citiesString,
         "toTime": this.toTime,
         "fromTime":this.fromTime,
       }
@@ -211,13 +245,14 @@ import ModifyModal from '@/components/ModifyModal.vue'
     },
     fnSearch(){
       let apiUrl ='/api/list'
+      let citiesString = this.selectedCites.join()
       this.form = {
         "e_no": this.e_no,
         "u_id": this.u_id,
         "uname": this.uname,
         "gender":this.gender,
         "nation": this.selectedNation,
-        "city":this.selectedCity,
+        "city":citiesString,
         "toTime": this.toTime,
         "fromTime":this.fromTime,
       }
@@ -314,6 +349,20 @@ import ModifyModal from '@/components/ModifyModal.vue'
     },
     handleUserData(userData) {
       this.addRowUserData=userData
+    },
+    checkedAll(checked){
+      this.selectAllCitiesCheckbox = checked
+      if (this.selectAllCitiesCheckbox) {
+      this.selectedCites = [...this.cities[this.selectedNation]];
+      this.selectAllCitiesCheckbox=false;
+      } else {
+        this.selectedCites = [];
+      }
+    }
+  },
+  watch: {
+    selectedCites() {
+    this.updateCitiesString(); // selectedCites 값 변경 시 citiesString 업데이트
     },
   }
 

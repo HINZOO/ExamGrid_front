@@ -34,10 +34,34 @@
             </select>
       </td>
       <td class="col">
-        <select class="form-select" v-model="form.city" name="city">
-              <option  value="">도시</option>
-              <option v-for="city in cities[form.nation]" :value="city" :key="city">{{ city }}</option>
-        </select> 
+        <div class="col dropdown">
+              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start" data-bs-toggle="dropdown" >
+               <span v-if="this.citiesString==''">도시</span>
+               <span v-else>{{ this.citiesString }}</span>
+              </button>
+              <div class="dropdown-menu p-4 w-100">
+                <label>
+                  <input 
+                          type="checkbox" 
+                          @click="checkedAll($event.target.checked)"
+                          v-model="selectAllCitiesCheckbox"
+                          >
+                          전체
+                </label>
+                  <div  
+                      v-for="city in this.cities[form.nation]"
+                      :key="city" 
+                  >
+                    <label>
+                      <input type="checkbox"  
+                        v-model="selectedCites"
+                        name="city" 
+                       :value="city"
+                       >{{ city }}
+                    </label>
+                  </div>  
+              </div>
+            </div> 
       </td>
   </tr>
 </template>
@@ -50,6 +74,7 @@ export default {
   },
   data() {
     return {
+      selectAllCitiesCheckbox:false,
       countries: ['한국', '미국', '일본'], // 국가 목록
       cities: {
         한국: ['서울', '부산', '인천','경기','대구'],
@@ -57,6 +82,8 @@ export default {
         일본:  ['도쿄', '오사카', '후쿠오카']
       }, // 도시 목록
       items: [],
+      selectedCites:[],
+      citiesString:'',
       form:{  u_id: '',
               uname: '',
               gender: '',
@@ -69,34 +96,37 @@ export default {
   },
   methods: {
     updateCities() {
-      this.form.city = ''; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
-    },
-    submitForm() {
-      const newUser = {
-        u_id: this.form.u_id,
-        uname: this.form.uname,
-        gender: this.form.gender,
-        nation: this.form.nation,
-        city: this.form.city
-      };
-      this.$emit('add-user', newUser);
-      // 폼 초기화
-      this.form.u_id = '';
-      this.form.uname = '';
-      this.form.gender = 'M';
-      this.form.nation = '';
       this.form.city = '';
+      this.selectedCites=[];
+      this.selectAllCitiesCheckbox=false;
+      // 선택한 국가가 변경될 때마다 선택한 도시 초기화
+    },
+    updateCitiesString() {
+    this.citiesString = this.selectedCites.join();
+    this.form.city=this.citiesString;
+    },
+    checkedAll(checked){
+      this.selectAllCitiesCheckbox = checked
+      if (this.selectAllCitiesCheckbox) {
+      this.selectedCites = [...this.cities[this.form.nation]];
+      } else {
+        this.selectedCites = [];
+      }
     }
+
 
   },
   watch: {
-  form: {
-    deep: true,
-    handler(newForm) {
-      this.$emit('row-userdata', newForm);
+    selectedCites() {
+    this.updateCitiesString(); // selectedCites 값 변경 시 citiesString 업데이트
+    },
+    form: {
+      deep: true,
+      handler(newForm) {
+        this.$emit('row-userdata', newForm);
+      }
     }
   }
-}
 }
 </script>
 
