@@ -5,12 +5,12 @@
       </td>
       <td class="col">
         <div class="input-group col">
-        <input type="text" name="u_id" class="form-control" v-model="form.u_id">
+        <input type="text" name="u_id" class="form-control" v-model="form.u_id" :placeholder="$t('Id')">
         </div>
       </td>
       <td class="col">
         <div class="input-group  col">
-        <input type="text" name="uname" class="form-control" v-model="form.uname">
+        <input type="text" name="uname" class="form-control" v-model="form.uname" :placeholder="$t('Name')">
         </div>
       </td>
       <td class="col">
@@ -18,25 +18,25 @@
             <div class="form-check form-check-inline ">
                 <label class="form-check-label">
                 <input class="form-check-input gender" type="radio" name="gender" value="M" v-model="form.gender" checked>
-                남</label>
+                {{$t('Man')}}</label>
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
                 <input class="form-check-input gender" type="radio" name="gender" value="W" v-model="form.gender">
-                녀</label>
+                {{$t('Woman')}}</label>
             </div>  
         </div>   
       </td>
       <td class="col">
             <select class="form-select" v-model="form.nation" @change="updateCities" name="nation">
-              <option value="">국가 </option>
+              <option value="">{{$t('Nation')}} </option>
               <option v-for="country in countries" :value="country" :key="country">{{ country }}</option>
             </select>
       </td>
       <td class="col">
         <div class="col dropdown">
               <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
-               <span v-if="this.citiesString==''">도시</span>
+               <span v-if="this.citiesString==''">{{$t('City')}}</span>
                <span v-else>{{ this.citiesString }}</span>
               </button>
               <div class="dropdown-menu p-4 w-100">
@@ -46,7 +46,7 @@
                           @click="checkedAll($event.target.checked)"
                           v-model="selectAllCitiesCheckbox"
                           >
-                          전체
+                          {{$t('ALL')}}
                 </label>
                   <div  
                       v-for="city in this.cities[form.nation]"

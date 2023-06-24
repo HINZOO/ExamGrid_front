@@ -1,0 +1,36 @@
+{
+  "title": "HI",
+  "Id":"Id",
+  "Name":"Name",
+  "Location":"Location",
+  "Nation":"Nation",
+  "City":"City",
+  "Gender":"Gender",
+  "Man":"Man",
+  "Woman":"Woman",
+  "ToTime":"ToTime",
+  "FromTime":"FromTime",
+  "Choice":"No.",
+
+  "Search":"Search",
+  "Add":"Add",
+  "Save":"Save",
+  "Excel":"Excel",
+  "Delete":"Delete",
+  "ALL":"All",
+  "Modify":"Modify PopUp",
+  "Prev":"Prev",
+  "Next":"Next",
+  "PAGE":"Page",
+
+  "countries": {
+    "한국": "South Korea",
+    "미국": "United States",
+    "일본": "Japan"
+  },
+  "cities": {
+    "한국": ["Seoul", "Busan", "Incheon", "Gyeonggi", "Daegu"],
+    "미국": ["New York", "LA", "Chicago"],
+    "일본": ["Tokyo", "Osaka", "Fukuoka"]
+  }
+}

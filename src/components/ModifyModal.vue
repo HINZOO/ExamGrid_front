@@ -4,59 +4,59 @@
           <div class="modal" >
               <div>
                 <div class="d-flex justify-content-between">
-                    <h3 class="modal-title">수정POPUP</h3>
+                    <h3 class="modal-title">{{$t('Modify')}}</h3>
                     <button type="button" class="text-end btn btn-outline-secondary mb-2" @click="fnOneUser"> link </button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="u_no" >
                     <div class="row">
                         <div class="col">
-                            <label class="form-control"> 아이디</label>
+                            <label class="form-control"> {{$t('Id')}}</label>
                         </div>
                         <div class="input-group mb-3 col">
-                            <input type="text" class="form-control" name="u_id" v-model="this.u_id" placeholder="아이디">
+                            <input type="text" class="form-control" name="u_id" v-model="this.u_id" :placeholder="$t('Id')">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label class="form-control">이름</label>
+                            <label class="form-control">{{$t('Name')}}</label>
                         </div>
                         <div class="input-group mb-3 col">
-                            <input type="text" class="form-control" name="uname" v-model="this.uname" placeholder="이름">
+                            <input type="text" class="form-control" name="uname" v-model="this.uname" :placeholder="$t('Name')">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label class="form-control">성별</label>
+                            <label class="form-control">{{$t('Gender')}}</label>
                         </div>
                         <div class="mb-3 form-check form-check col-3">
                             <input class="form-check-input" type="radio" name="gender" id="genderM" v-model="this.gender" value="M" >
-                            <label class="form-check-label" for="genderM">남</label>
+                            <label class="form-check-label" for="genderM">{{$t('Man')}}</label>
                         </div>
                         <div class=" mb-3 form-check form-check col-3">
                             <input class="form-check-input" type="radio" name="gender" id="genderW"  v-model="this.gender" value="W">
-                            <label class="form-check-label" for="gender">녀</label>
+                            <label class="form-check-label" for="gender">{{$t('Woman')}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col input-group mb-3">
-                            <label class="form-control">국가</label>
+                            <label class="form-control">{{$t('Nation')}}</label>
                         </div>
                         <div class="col nation">
                             <select class="form-select" v-model="this.nation" @change="updateCities" name="nation"  >
-                                <option value="">국가 </option>
+                                <option value="">{{$t('Nation')}} </option>
                                 <option v-for="country in countries" :value="country" :key="country">{{ country }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                     <div class="col input-group mb-3">
-                            <label class="form-control">도시</label>
+                            <label class="form-control">{{$t('City')}}</label>
                     </div>
                     <div class="col city">
                         <div class="col dropdown">
                         <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
-                        <span v-if="this.citiesString==''">도시</span>
+                        <span v-if="this.citiesString==''">{{$t('City')}}</span>
                         <span v-else>{{ this.citiesString }}</span>
                         </button>
                         <div class="dropdown-menu p-4 w-100">
@@ -66,7 +66,7 @@
                                     @click="checkedAll($event.target.checked)"
                                     v-model="selectAllCitiesCheckbox"
                                     >
-                                    전체
+                                    {{$t('ALL')}}
                             </label>
                             <div  
                                 v-for="city in this.cities[nation]"

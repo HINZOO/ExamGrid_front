@@ -3,32 +3,32 @@
   <form name="searchAndInsertForm" id="searchAndInsertForm">
       <div class="row">    
         <div class="input-group mb-3 col">
-          <input type="text" class="form-control" name="u_id" id="u_id" placeholder="아이디" v-model="u_id">
+          <input type="text" class="form-control" name="u_id" id="u_id" :placeholder="$t('Id')" v-model="u_id">
         </div>  
         <div class="input-group mb-3 col">
-            <input type="text" class="form-control" name="uname" id="uname" placeholder="이름" v-model="uname">
+            <input type="text" class="form-control" name="uname" id="uname" :placeholder="$t('Name')" v-model="uname">
         </div>
         <div class="col d-flex justify-content-evenly ">
             <div class="form-check form-check-inline ">
                 <label class="form-check-label">
                 <input class="form-check-input gender" type="radio" name="gender" value="M" v-model="gender">
-                남</label>
+                {{$t('Man')}}</label>
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
                 <input class="form-check-input gender" type="radio" name="gender" value="W" v-model="gender">
-                녀</label>
+                {{$t('Woman')}}</label>
             </div>    
         </div>        
         <div class="col d-flex justify-content-evenly">
           <div class="form-check form-check-inline">
               <label class="form-check-label">
-              <input class="form-check-input lang" type="radio" name="lang" onclick="langChange(event)" value="ko" >
+              <input class="form-check-input lang" type="radio" name="lang" @click="changeLocale($event.target.value)" value="ko" >
               한국어</label>
           </div>
           <div class="form-check form-check-inline">
               <label class="form-check-label">
-              <input class="form-check-input lang" type="radio" name="lang" onclick="langChange(event)" value="en">
+              <input class="form-check-input lang" type="radio" name="lang" @click="changeLocale($event.target.value)" value="en">
               English</label>
           </div>
         </div>
@@ -36,15 +36,16 @@
       <div class="row">
           <div class="col nation">
             <select class="form-select" v-model="selectedNation" @change="updateCities" name="nation">
-              <option value="">국가 </option>
+              <option value="">{{$t('Nation')}} </option>
               <option v-for="country in countries" :value="country" :key="country">{{ country }}</option>
             </select>
           </div>
           <div class="col city">
             <div class="col dropdown">
               <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
-                <span v-if="this.citiesString==''">도시</span>
-               <span v-else>{{ this.citiesString }}</span>
+                <span v-if="this.citiesString==''">{{$t('City')}} <i class="bi bi-chevron-down text-black"></i></span>
+                <span v-else>{{ this.citiesString }}</span>
+              
               </button>
               <div class="dropdown-menu p-4 w-100">
                 <label>
@@ -53,7 +54,7 @@
                           @click="checkedAll($event.target.checked)"
                           v-model="selectAllCitiesCheckbox"
                           >
-                          전체
+                          {{$t('ALL')}}
                 </label>
                   <div  
                       v-for="city in this.cities[selectedNation]"
@@ -74,24 +75,24 @@
           <div class="col">
               <div class="form-floating">
                   <input type="text" class="form-control" name="toTime" id="floatingFrom" v-model="toTime" placeholder="일정 시작" onfocus="(this.type='date')">
-                  <label for="floatingFrom">시작일</label>
+                  <label for="floatingFrom">{{$t('ToTime')}} </label>
               </div>
           </div>
 
           <div class="col">
               <div class="form-floating">
                 <input type="text" class="form-control" name="fromTime"  id="floatingTo" v-model="fromTime" placeholder="일정 끝" onfocus="(this.type='date')">
-                <label  for="floatingTo">종료일</label>
+                <label  for="floatingTo">{{$t('FromTime')}} </label>
               </div>
           </div>
       </div>
      <hr class="mb-0">
       <div id="buttons" class="text-end py-3 ">
-        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnSearch()" >조회</button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnAddRow()"> 추가</button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click.prevent="fnSave()"> 저장</button>
-        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnExcelDown()"> 엑셀다운</button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnDelete()" >삭제</button>
+        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnSearch()" >{{$t('Search')}} </button>
+        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnAddRow()">{{$t('Add')}}</button>
+        <button type="button" class="btn btn-outline-secondary mx-1" @click.prevent="fnSave()">{{$t('Save')}}</button>
+        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnExcelDown()">{{$t('Excel')}}</button>
+        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnDelete()" >{{$t('Delete')}}</button>
       </div>
     </form>
 
@@ -127,6 +128,7 @@ import ModifyModal from '@/components/ModifyModal.vue'
   },
   data() {
     return {
+      selectedLanguage: 'ko',
       selectAllCitiesCheckbox: false,
       isOpen: false,
       updateUserNo: '',
@@ -357,6 +359,13 @@ import ModifyModal from '@/components/ModifyModal.vue'
       this.selectAllCitiesCheckbox=false;
       } else {
         this.selectedCites = [];
+      }
+    },
+    changeLocale(val) {
+      if(val=='ko'){
+        return (this.$i18n.locale = 'ko')
+      }else{
+        this.$i18n.locale = 'en'
       }
     }
   },

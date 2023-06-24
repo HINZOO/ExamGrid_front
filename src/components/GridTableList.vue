@@ -4,15 +4,15 @@
           <table id="ListTable" class="table table-bordered table-responsive text-center table-hover">
           <thead class="align-middle">
             <tr>
-                <th scope="col" rowspan="2" id="noChk">선택</th>
-                <th scope="col" rowspan="2">아이디</th>
-                <th scope="col" rowspan="2">이름</th>
-                <th scope="col" rowspan="2">성별</th>
-                <th scope="col" colspan="2">장소</th>
+                <th scope="col" rowspan="2" id="noChk">{{$t('Choice')}} </th>
+                <th scope="col" rowspan="2">{{$t('Id')}} </th>
+                <th scope="col" rowspan="2">{{$t('Name')}} </th>
+                <th scope="col" rowspan="2">{{$t('Gender')}} </th>
+                <th scope="col" colspan="2">{{$t('Location')}} </th>
             </tr>
             <tr>                
-              <th scope="col">국가</th>
-              <th scope="col">도시</th>
+              <th scope="col">{{$t('Nation')}} </th>
+              <th scope="col">{{$t('City')}} </th>
             </tr>
           </thead>
           <tbody id="loadCont" class="w-100 h-75 overflow-scroll">
@@ -47,11 +47,11 @@
 
         <div class="btn-cover text-center">
           <button :disabled="pageNum === 0" @click="prevPage" class="btn btn-sm btn-outline-success me-2">
-            이전
+          {{$t('Prev')}}
           </button>
-          <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span>
+          <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} {{$t('PAGE')}}</span>
           <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="btn btn-sm btn-outline-success ms-2">
-          다음
+            {{$t('Next')}}
           </button>
         </div>
 
