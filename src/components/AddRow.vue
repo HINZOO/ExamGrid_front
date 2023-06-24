@@ -35,7 +35,7 @@
       </td>
       <td class="col">
         <div class="col dropdown">
-              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start" data-bs-toggle="dropdown" >
+              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
                <span v-if="this.citiesString==''">도시</span>
                <span v-else>{{ this.citiesString }}</span>
               </button>
