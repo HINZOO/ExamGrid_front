@@ -107,6 +107,7 @@ export default {
         return{
             selectAllCitiesCheckbox: false,
             isModal : false,
+            isLink:false,
             countries: ['한국', '미국', '일본'], // 국가 목록
             cities: {
                 한국: ['서울', '부산', '인천','경기','대구'],
@@ -153,7 +154,6 @@ export default {
                this.nation=data.nation;
                const cityArr=data.city.split(",")
                this.selectedCites = cityArr
-               //this.city=data.city;
                this.post_time=data.post_time
                return this.user=data;
             }).catch((err) => {
@@ -184,7 +184,10 @@ export default {
             })
         },
         fnOneUser(){
+            this.isLink = !this.isLink;
             this.$emit('userLink',this.user);
+            this.$emit('isLink',this.isLink);
+            this.fnModalClose();
         },
         checkedAll(checked){
             this.selectAllCitiesCheckbox = checked

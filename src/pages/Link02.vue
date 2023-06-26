@@ -1,16 +1,16 @@
 <template>
   <div class="list container my-4">
-    <GridMain/>
+
   </div>
 </template>
 
 <script>
-import GridMain from '@/components/GridMain';
+//mport GridMain from '@/components/GridMain';
 
 export default {
-  name: "grid",
+  name: "Link02",
   components: {
-    GridMain,
+ //   GridMain,
   },
   data() {
     return {

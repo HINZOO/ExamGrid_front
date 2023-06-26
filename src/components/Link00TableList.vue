@@ -46,11 +46,11 @@
         </form>
 
         <div class="btn-cover text-center">
-          <button :disabled="pageNum === 0" @click="prevPage" class="btn btn-sm btn-outline-success me-2">
-          {{$t('Prev')}}
+          <button :disabled="pageNum === 0" @click="prevPage" class="btn btn-sm btn-secondary me-2">
+            {{$t('Prev')}}
           </button>
-          <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} {{$t('PAGE')}}</span>
-          <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="btn btn-sm btn-outline-success ms-2">
+          <a v-for="(idx) in pageCount" :key="idx" @click="goToPage(idx - 1)" :class="{ active: idx === pageNum + 1 }" class="mx-1 btn btn-link text-secondary">{{ idx }}</a>
+          <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="btn btn-sm btn-secondary ms-2">
             {{$t('Next')}}
           </button>
         </div>
@@ -59,10 +59,10 @@
 </template>
 <script>
 
-import AddRow from '@/components/AddRow.vue'
+import AddRow from '@/components/Link00AddRow.vue'
 
 export default {
-  name: "GridTableList",
+  name: "Link00TableList",
   components:{
     AddRow,
 
@@ -91,10 +91,6 @@ export default {
           listSize = this.pageSize,
           page = Math.floor(listLeng / listSize);
       if (listLeng % listSize > 0) page += 1;
-      /*
-      아니면 page = Math.floor((listLeng - 1) / listSize) + 1;
-      이런식으로 if 문 없이 고칠 수도 있다!
-      */
       return page;
     },
     paginatedData () {
@@ -129,6 +125,9 @@ export default {
     // sendUserData 이벤트를 발생시켜 addRowUser 데이터를 부모로 전달
     this.$emit('sendUserData', this.addRowUser);
     },
+    goToPage(index) {
+      this.pageNum = index;
+  },
     nextPage () {
       this.pageNum += 1;
     },

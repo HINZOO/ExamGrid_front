@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import Home from './pages/Home.vue';
-import List from './pages/List.vue';
+import Link from './pages/Link.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,7 +25,8 @@ const i18n = createI18n({
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/list', component: List }
+  { path: '/list', component: Link },
+
 ];
 
 const router = createRouter({

@@ -88,6 +88,7 @@
       </div>
      <hr class="mb-0">
       <div id="buttons" class="text-end py-3 ">
+        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnLink1()" >Link1</button>
         <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnSearch()" >{{$t('Search')}} </button>
         <button type="button" class="btn btn-outline-secondary mx-1" @click="fnAddRow()">{{$t('Add')}}</button>
         <button type="button" class="btn btn-outline-secondary mx-1" @click.prevent="fnSave()">{{$t('Save')}}</button>
@@ -96,7 +97,7 @@
       </div>
     </form>
 
-    <GridTableList 
+    <Link00TableList
       v-bind:usersList="userList" 
       v-bind:addrow="this.addRow"
       @delchk="fnDelNum"
@@ -109,25 +110,28 @@
     :updateUserNo="this.updateUserNo"
     @modalClose="isModal"
     :fnList="fnGetList"
-    @userLink="userOneSearch"
+    @isLink="fnIsLink"
+    @userLink="fnUserData"
     />
   
   </div>
   </template>
 
 <script>
-import GridTableList from '@/components/GridTableList.vue'
+import Link00TableList from '@/components/Link00TableList.vue'
 import * as xlsx from 'xlsx'
-import ModifyModal from '@/components/ModifyModal.vue'
+import ModifyModal from '@/components/Link00ModifyModal.vue'
 
  export default {
-  name: "GridInsertSearchList",
+  name: "Link00Form",
   components:{
-    GridTableList,
+    Link00TableList,
     ModifyModal
   },
   data() {
     return {
+      isLink: false,
+      userDataByLink:{},
       selectedLanguage: 'ko',
       selectAllCitiesCheckbox: false,
       isOpen: false,
@@ -159,7 +163,6 @@ import ModifyModal from '@/components/ModifyModal.vue'
   },
   mounted() {
     this.fnGetList()
-    //this.fnSearch();
   },
   methods: {
     updateCities() {
@@ -324,31 +327,31 @@ import ModifyModal from '@/components/ModifyModal.vue'
     isModal(isModal){
       this.isOpen=isModal;
     },
-    userOneSearch(user){
-      let apiUrl ='/api/list'
-      console.log("검색"+user)
-      const USER = {
-        "e_no": user.e_no,
-        "u_id": user.u_id,
-        "uname": user.uname,
-        "gender":user.gender,
-        "nation": user.nation,
-        "city":user.city,
-        "post_time": user.post_time,
-        "toTime": '',
-        "fromTime": '',
-      }
-      this.$axios.post(apiUrl,USER)
-      .then((res) => {
-        this.isOpen=false;
-        this.userList=res.data
-        console.log("검색"+res.data)
-      }).catch((err) => {
-          if (err.message.indexOf('Network Error') > -1) {
-            alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-          }
-        })
-    },
+    // userOneSearch(user){
+    //   let apiUrl ='/api/list'
+    //   console.log("검색"+user)
+    //   const USER = {
+    //     "e_no": user.e_no,
+    //     "u_id": user.u_id,
+    //     "uname": user.uname,
+    //     "gender":user.gender,
+    //     "nation": user.nation,
+    //     "city":user.city,
+    //     "post_time": user.post_time,
+    //     "toTime": '',
+    //     "fromTime": '',
+    //   }
+    //   this.$axios.post(apiUrl,USER)
+    //   .then((res) => {
+    //     this.isOpen=false;
+    //     this.userList=res.data
+    //     console.log("검색"+res.data)
+    //   }).catch((err) => {
+    //       if (err.message.indexOf('Network Error') > -1) {
+    //         alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+    //       }
+    //     })
+    // },
     handleUserData(userData) {
       this.addRowUserData=userData
     },
@@ -367,6 +370,14 @@ import ModifyModal from '@/components/ModifyModal.vue'
       }else{
         this.$i18n.locale = 'en'
       }
+    },
+    fnIsLink(isLink){
+      this.isLink=isLink,
+      this.$emit('isLink',this.isLink);
+    },
+    fnUserData(user){
+      this.userDataByLink=user;
+      this.$emit('userData',this.userDataByLink)
     }
   },
   watch: {
