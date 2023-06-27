@@ -67,16 +67,19 @@ computed: {
 },
 data(){
 return{
+  userUNo: this.user.u_no
 }
 },
 methods: {
 
-  // fnGotoLink2(){
-  //   this.$router.push({
-  //     name: "Link1Page",
-  //     params: {link1Uno:this.user.u_no}
-  //   })
-  // }
+  fnGotoLink2(){
+    this.$router.push({
+      name: "Link02",
+      params: {
+        linkUno:this.userUNo
+      }
+    })
+  }
 
 },
 watch:{

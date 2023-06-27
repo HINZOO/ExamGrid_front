@@ -1,0 +1,28 @@
+{
+"JOB": "职业",
+"HOBBY": "爱好",
+"IsMarried": "婚姻状况",
+"Married": "已婚",
+"Single": "未婚",
+"FoodCategory": "食物分类",
+"FoodType": "食物类型",
+"Korean": "韩语",
+"Chinese": "中文",
+"FavoriteFood":"最喜欢的食物",
+"Category":"分类",
+"Type":"类型",
+"Search": "搜索",
+"Add": "添加",
+"Save": "保存",
+"Excel": "Excel",
+"Delete": "删除",
+"ALL": "全部",
+"Modify": "修改",
+"Prev": "上一页",
+"Next": "下一页",
+"PAGE": "页面",
+"ToTime":"开始",
+"FromTime":"结尾",
+"Choice":"选择"
+
+}

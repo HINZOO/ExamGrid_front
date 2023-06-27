@@ -41,36 +41,10 @@
             </select>
           </div>
           <div class="col city">
-            <div class="col dropdown">
-              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
-                <span v-if="this.citiesString==''">{{$t('City')}} <i class="bi bi-chevron-down text-black"></i></span>
-                <span v-else>{{ this.citiesString }}</span>
-              
-              </button>
-              <div class="dropdown-menu p-4 w-100">
-                <label>
-                  <input 
-                          type="checkbox" 
-                          @click="checkedAll($event.target.checked)"
-                          v-model="selectAllCitiesCheckbox"
-                          >
-                          {{$t('ALL')}}
-                </label>
-                  <div  
-                      v-for="city in this.cities[selectedNation]"
-                      :key="city" 
-                  >
-                    <label>
-                      <input type="checkbox"  
-                        v-model="selectedCites"
-                        name="city" 
-                       :value="city"
-                       >{{ city }}
-                    </label>
-                  </div>  
-              </div>
-            </div>  
-                             
+            <select class="form-select" v-model="this.selectedCity" name="city">
+              <option  value=""> {{$t('City')}} </option>
+              <option v-for="city in cities[selectedNation]" :value="city" :key="city">{{ city }}</option>
+            </select>   
           </div>
           <div class="col">
               <div class="form-floating">
@@ -88,12 +62,12 @@
       </div>
      <hr class="mb-0">
       <div id="buttons" class="text-end py-3 ">
-        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnLink1()" >Link1</button>
-        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnSearch()" >{{$t('Search')}} </button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnAddRow()">{{$t('Add')}}</button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click.prevent="fnSave()">{{$t('Save')}}</button>
-        <button type="submit" class="btn btn-outline-secondary mx-1" @click.prevent="fnExcelDown()">{{$t('Excel')}}</button>
-        <button type="button" class="btn btn-outline-secondary mx-1" @click="fnDelete()" >{{$t('Delete')}}</button>
+        <button type="submit" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click.prevent="fnLink1()" >Link1</button>
+        <button type="submit" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click.prevent="fnSearch()" >{{$t('Search')}} </button>
+        <button type="button" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click="fnAddRow()">{{$t('Add')}}</button>
+        <button type="button" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click.prevent="fnSave()">{{$t('Save')}}</button>
+        <button type="submit" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click.prevent="fnExcelDown()">{{$t('Excel')}}</button>
+        <button type="button" class="btn btn-outline-secondary mx-1 px-3 rounded-5" @click="fnDelete()" >{{$t('Delete')}}</button>
       </div>
     </form>
 
@@ -133,7 +107,6 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
       isLink: false,
       userDataByLink:{},
       selectedLanguage: 'ko',
-      selectAllCitiesCheckbox: false,
       isOpen: false,
       updateUserNo: '',
       IndexDelArr:[],
@@ -149,7 +122,6 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
       selectedNation: '',
       selectedCity: '',
       selectedCites:[],
-      citiesString:'',
       countries: ['한국', '미국', '일본'], // 국가 목록
       cities: {
         한국: ['서울', '부산', '인천','경기','대구'],
@@ -167,11 +139,6 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
   methods: {
     updateCities() {
       this.selectedCity = '';
-      this.selectedCites=[];
-      this.selectAllCitiesCheckbox=false; // 선택한 국가가 변경될 때마다 선택한 도시 초기화
-    },
-    updateCitiesString() {
-    this.citiesString = this.selectedCites.join();
     },
     checkDuplicateId() {
       const apiUrl = '/api/idcheck';
@@ -227,7 +194,7 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
         "uname": this.uname,
         "gender":this.gender,
         "nation": this.selectedNation,
-        "city":this.citiesString,
+        "city":this.city,
         "toTime": this.toTime,
         "fromTime":this.fromTime,
       }
@@ -250,21 +217,19 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
     },
     fnSearch(){
       let apiUrl ='/api/list'
-      let citiesString = this.selectedCites.join()
       this.form = {
         "e_no": this.e_no,
         "u_id": this.u_id,
         "uname": this.uname,
         "gender":this.gender,
         "nation": this.selectedNation,
-        "city":citiesString,
+        "city":this.city,
         "toTime": this.toTime,
         "fromTime":this.fromTime,
       }
       this.$axios.post(apiUrl, this.form)
       .then((res) => {
         this.userList=res.data
-        //console.log(res.data)
       }).catch((err) => {
           if (err.message.indexOf('Network Error') > -1) {
             alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -273,9 +238,25 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
     },
     fnExcelDown(){
       const workBook = xlsx.utils.book_new()
-      const workSheet = xlsx.utils.json_to_sheet(this.userList)
+      let userArray=[];
+      let idx = 1;
+      for(let user of this.userList){
+        let setCell={
+          "번호":idx,
+          "아이디":user.u_id,
+          "이름":user.uname,
+          "성별":(user.gender=='W')?'녀':'남',
+          "국가":user.nation,
+          "도시":user.city,
+        }
+        userArray.push(setCell);
+        idx++; 
+      }
+
+      const workSheet = xlsx.utils.json_to_sheet(userArray)
       xlsx.utils.book_append_sheet(workBook, workSheet, 'example')
       xlsx.writeFile(workBook, 'example.xlsx')
+      
     },
     fnDelete() {
       if (this.IndexDelArr.length > 0) {
@@ -354,15 +335,6 @@ import ModifyModal from '@/components/Link00ModifyModal.vue'
     // },
     handleUserData(userData) {
       this.addRowUserData=userData
-    },
-    checkedAll(checked){
-      this.selectAllCitiesCheckbox = checked
-      if (this.selectAllCitiesCheckbox) {
-      this.selectedCites = [...this.cities[this.selectedNation]];
-      this.selectAllCitiesCheckbox=false;
-      } else {
-        this.selectedCites = [];
-      }
     },
     changeLocale(val) {
       if(val=='ko'){

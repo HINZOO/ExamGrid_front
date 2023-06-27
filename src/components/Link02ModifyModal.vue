@@ -5,60 +5,60 @@
               <div>
                 <div class="d-flex justify-content-between">
                     <h3 class="modal-title">{{$t('Modify')}}</h3>
-                    <button type="button" class="text-end btn btn-outline-secondary mb-2" @click="fnOneUser"> link </button>
+                    <!-- <button type="button" class="text-end btn btn-outline-secondary mb-2" @click="fnOneUser"> link </button> -->
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="u_no" >
                     <div class="row">
                         <div class="col">
-                            <label class="form-control"> {{$t('Id')}}</label>
+                            <label class="form-control"> {{$t('JOB')}}</label>
                         </div>
                         <div class="input-group mb-3 col">
-                            <input type="text" class="form-control" name="u_id" v-model="this.u_id" :placeholder="$t('Id')">
+                            <input type="text" class="form-control" name="job" v-model="this.job" :placeholder="$t('JOB')">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label class="form-control">{{$t('Name')}}</label>
+                            <label class="form-control">{{$t('HOBBY')}}</label>
                         </div>
                         <div class="input-group mb-3 col">
-                            <input type="text" class="form-control" name="uname" v-model="this.uname" :placeholder="$t('Name')">
+                            <input type="text" class="form-control" name="hobby" v-model="this.hobby" :placeholder="$t('HOBBY')">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label class="form-control">{{$t('Gender')}}</label>
+                            <label class="form-control">{{$t('IsMarried')}}</label>
                         </div>
                         <div class="mb-3 form-check form-check col-3">
-                            <input class="form-check-input" type="radio" name="gender" id="genderM" v-model="this.gender" value="M" >
-                            <label class="form-check-label" for="genderM">{{$t('Man')}}</label>
+                            <input class="form-check-input" type="radio" name="ismarried" id="married" v-model="this.ismarried" value="1" >
+                            <label class="form-check-label" for="married">{{$t('Married')}}</label>
                         </div>
                         <div class=" mb-3 form-check form-check col-3">
-                            <input class="form-check-input" type="radio" name="gender" id="genderW"  v-model="this.gender" value="W">
-                            <label class="form-check-label" for="gender">{{$t('Woman')}}</label>
+                            <input class="form-check-input" type="radio" name="ismarried" id="single"  v-model="this.ismarried" value="0">
+                            <label class="form-check-label" for="single">{{$t('Single')}}</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col input-group mb-3">
-                            <label class="form-control">{{$t('Nation')}}</label>
+                            <label class="form-control">{{$t('FoodCategory')}}</label>
                         </div>
                         <div class="col nation">
-                            <select class="form-select" v-model="this.nation" @change="updateCities" name="nation"  >
-                                <option value="">{{$t('Nation')}} </option>
-                                <option v-for="country in countries" :value="country" :key="country">{{ country }}</option>
+                            <select class="form-select" v-model="this.foodcate" @change="updateCities" name="foodcate"  >
+                                <option value="">{{$t('FoodCategory')}} </option>
+                                <option v-for="food in FOODCATE" :value="food" :key="food">{{ food }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col input-group mb-3">
-                                <label class="form-control">{{$t('City')}}</label>
-                        </div>
-                        <div class="col city">
-                            <select class="form-select" v-model="this.city" name="city">
-                                <option  value=""> {{$t('City')}} </option>
-                                <option v-for="city in cities[this.nation]" :value="city" :key="city">{{ city }}</option>
-                            </select> 
-                        </div>
+                    <div class="col input-group mb-3">
+                            <label class="form-control">{{$t('FoodType')}}</label>
+                    </div>
+                    <div class="col city">
+                        <select class="form-select" v-model="this.foodtype" name="foodtype">
+                            <option value=""> {{$t('FoodType')}} </option>
+                            <option v-for="foodType in FOODTYPE[this.foodcate]" :value="foodType" :key="foodType">{{ foodType }}</option>
+                        </select>    
+                    </div>
                     </div>
                     <div class="text-center my-3">
                         <button type="button" class="btn btn-primary me-4" @click="modifySave">저장</button>
@@ -81,24 +81,21 @@ export default {
     },
     data(){
         return{
-            selectAllCitiesCheckbox: false,
             isModal : false,
             isLink:false,
-            countries: ['한국', '미국', '일본'], // 국가 목록
-            cities: {
-                한국: ['서울', '부산', '인천','경기','대구'],
-                미국: ['뉴욕','LA', '시카고'],
-                일본: ['도쿄', '오사카', '후쿠오카']
-            }, // 도시 목록
-            selectedCites:[],
-            citiesString:'',
+            FOODCATE: ['한식', '양식', '일식','중식'],
+            FOODTYPE: {
+                한식: ['비빔밥', '된장찌개', '삼겹살','떡','백반'],
+                양식: ['피자','파스타','햄버거','스테이크','샐러드'],
+                일식: ['초밥', '덮밥', '오코노미야끼'],
+                중식: ['짜장면', '짬뽕', '탕수육']
+            },
             u_no:'',
-            u_id: '',
-            uname: '',
-            gender: '',
-            nation: '',
-            city: '',
-            post_time:'',
+            job: '',
+            hobby: '',
+            ismarried: '',
+            foodcate: '',
+            foodtype: '',
             user:{}
             
         }
@@ -108,7 +105,7 @@ export default {
             this.city = '';
         },
         fnModalClose(){
-            this.isModal=false
+            this.isModal=false;
             this.$emit('modalClose',this.isModal)
         },
         fnUserList(){
@@ -119,11 +116,11 @@ export default {
             this.$axios.post(apiUrl,uno)
             .then(({data}) => {
                this.u_no=data.u_no;
-               this.u_id=data.u_id;
-               this.uname=data.uname;
-               this.gender=data.gender;
-               this.nation=data.nation;
-               this.city=data.city;
+               this.job=data.job;
+               this.hobby=data.hobby;
+               this.ismarried=data.ismarried;
+               this.foodcate=data.foodcate;
+               this.foodtype=data.foodtype;
                this.post_time=data.post_time
                return this.user=data;
             }).catch((err) => {
@@ -135,18 +132,19 @@ export default {
         modifySave(){
             let form={
                 "u_no": this.u_no,
-                "u_id": this.u_id,
-                "uname": this.uname,
-                "gender":this.gender,
-                "nation": this.nation,
-                "city":this.city,
+                "job": this.job,
+                "hobby": this.hobby,
+                "ismarried":this.ismarried,
+                "foodcate": this.foodcate,
+                "foodtype":this.foodtype,
             }
-            let apiUrl ='/api/update';
+            let apiUrl ='/api/link2/update';
             this.$axios.post(apiUrl,form)
             .then((res) => {
-                console.log(res);
+                console.log(res.config.data);
+                this.user=form;
+                this.$emit('updatedUser',this.user);
                 this.fnModalClose();
-                this.fnList();            
             }).catch((err) => {
             if (err.message.indexOf('Network Error') > -1) {
             alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -165,9 +163,7 @@ export default {
     this.fnUserList()
      }, 
     watch: {
-    selectedCites() {
-    this.updateCitiesString(); // selectedCites 값 변경 시 citiesString 업데이트
-     }
+
     }
 }
 

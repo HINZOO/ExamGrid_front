@@ -1,7 +1,7 @@
 <template>
    <tr >
       <td >
-          <input type="checkbox" name="e_no"  >
+          <input type="checkbox" name="e_no">
       </td>
       <td class="col">
         <div class="input-group col">
@@ -34,34 +34,10 @@
             </select>
       </td>
       <td class="col">
-        <div class="col dropdown">
-              <button type="button" class="w-100 btn btn-primary bg-white text-black text-start border border-light-subtle" data-bs-toggle="dropdown" >
-               <span v-if="this.citiesString==''">{{$t('City')}}</span>
-               <span v-else>{{ this.citiesString }}</span>
-              </button>
-              <div class="dropdown-menu p-4 w-100">
-                <label>
-                  <input 
-                          type="checkbox" 
-                          @click="checkedAll($event.target.checked)"
-                          v-model="selectAllCitiesCheckbox"
-                          >
-                          {{$t('ALL')}}
-                </label>
-                  <div  
-                      v-for="city in this.cities[form.nation]"
-                      :key="city" 
-                  >
-                    <label>
-                      <input type="checkbox"  
-                        v-model="selectedCites"
-                        name="city" 
-                       :value="city"
-                       >{{ city }}
-                    </label>
-                  </div>  
-              </div>
-            </div> 
+            <select class="form-select" v-model="form.city" name="city">
+              <option  value=""> {{$t('City')}} </option>
+              <option v-for="city in cities[form.nation]" :value="city" :key="city">{{ city }}</option>
+            </select>   
       </td>
   </tr>
 </template>
@@ -97,29 +73,9 @@ export default {
   methods: {
     updateCities() {
       this.form.city = '';
-      this.selectedCites=[];
-      this.selectAllCitiesCheckbox=false;
-      // 선택한 국가가 변경될 때마다 선택한 도시 초기화
     },
-    updateCitiesString() {
-    this.citiesString = this.selectedCites.join();
-    this.form.city=this.citiesString;
-    },
-    checkedAll(checked){
-      this.selectAllCitiesCheckbox = checked
-      if (this.selectAllCitiesCheckbox) {
-      this.selectedCites = [...this.cities[this.form.nation]];
-      } else {
-        this.selectedCites = [];
-      }
-    }
-
-
   },
   watch: {
-    selectedCites() {
-    this.updateCitiesString(); // selectedCites 값 변경 시 citiesString 업데이트
-    },
     form: {
       deep: true,
       handler(newForm) {
